@@ -456,8 +456,28 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+    """
+     A search state in this problem is a tuple ( pacmanPosition, foodGrid ) where
+      pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
+      foodGrid:       a Grid (see game.py) of either True or False, specifying remaining food
+    """
+    # Convert food grid to list of coordinates of remaining food
+    foodList = foodGrid.asList()
+
+    # If there is no food left, then the heuristic is 0
+    if len(foodList) == 0:
+        return 0
+
+    # Find the nearest food and store coordinates
+    nearestFood = min(foodList, key=lambda food: util.manhattanDistance(position, food))
+
+    # Now find the nearest food to the nearest food and store coordinates
+    nearestFoodToNearestFood = min(foodList, key=lambda food: util.manhattanDistance(nearestFood, food))
+
+    # The heuristic is the distance from the current position to the nearest food plus the distance from the nearest food to the nearest food
+    heuristic = util.manhattanDistance(position, nearestFood) + util.manhattanDistance(nearestFood, nearestFoodToNearestFood)
+
+    return heuristic
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
