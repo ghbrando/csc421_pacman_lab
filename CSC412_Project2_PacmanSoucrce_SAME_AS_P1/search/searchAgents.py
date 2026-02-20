@@ -474,8 +474,8 @@ def foodHeuristic(state, problem):
     # Now find the nearest food to the nearest food and store coordinates
     nearestFoodToNearestFood = min(foodList, key=lambda food: util.manhattanDistance(nearestFood, food))
 
-    # The heuristic is the distance from the current position to the nearest food plus the distance from the nearest food to the nearest food
-    heuristic = util.manhattanDistance(position, nearestFood) + util.manhattanDistance(nearestFood, nearestFoodToNearestFood)
+    # Return the sum of the distance from the nearest food to all other food as the heuristic
+    heuristic = sum([util.manhattanDistance(nearestFood, food) for food in foodList])
 
     return heuristic
 
